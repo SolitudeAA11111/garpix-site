@@ -1,0 +1,9 @@
+version: '1'
+
+services:
+
+  gxcms:
+    build: docker
+    restart: always
+    ports:
+      - '8000:8000'
