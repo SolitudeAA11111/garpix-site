@@ -1,0 +1,23 @@
+FROM python
+
+RUN mkdir -p /src && \
+    mkdir -p /src/public/static && \
+    mkdir -p /src/public/media
+
+WORKDIR /src/app
+
+RUN git clone https://github.com/SolitudeAA11111/garpix-site.git /src/app
+RUN git checkout remotes/origin/main
+
+RUN cp /src/example.env .env
+RUN pip install -r /src/requirements.txt
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6 -y
+
+WORKDIR app/src/backend
+
+RUN python /backend/manage.py makemigrations
+RUN python /backend/manage.py migrate
+
+EXPOSE 8000
+
+CMD ["python", "/backend/manage.py", "runserver", "0.0.0.0:8000"]
